@@ -1,15 +1,25 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('easy_pdf_viewer');
-
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  const channel = MethodChannel('easy_pdf_viewer_plugin');
 
   setUp(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
-      return '42';
+      switch (methodCall.method) {
+        case 'getNumberOfPages':
+          return '5';
+        case 'getPage':
+          return '/cache/page-1.png';
+        case 'clearCacheDir':
+          return null;
+        default:
+          return null;
+      }
     });
   });
 
@@ -18,7 +28,9 @@ void main() {
         .setMockMethodCallHandler(channel, null);
   });
 
-  test('getPlatformVersion', () async {
-    // expect(await EasyPdfViewer.platformVersion, '42');
+  test('PDFViewer and PDFDocument are exported', () {
+    expect(PDFViewer, isNotNull);
+    expect(PDFDocument, isNotNull);
+    expect(IndicatorPosition.values.length, 4);
   });
 }

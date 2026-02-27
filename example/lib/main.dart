@@ -5,18 +5,16 @@ import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 void main() => runApp(App());
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MyApp(),
-    );
+    return MaterialApp(home: MyApp());
   }
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({this.progressExample = false});
+  const MyApp({super.key, this.progressExample = false});
 
   final bool progressExample;
 
@@ -34,27 +32,21 @@ class _MyAppState extends State<MyApp> {
     loadDocument();
   }
 
-  loadDocument() async {
+  Future<void> loadDocument() async {
     document = await PDFDocument.fromAsset('assets/sample.pdf');
 
     setState(() => _isLoading = false);
   }
 
-  changePDF(value) async {
+  Future<void> changePDF(int value) async {
     setState(() => _isLoading = true);
     if (value == 1) {
       document = await PDFDocument.fromAsset('assets/sample2.pdf');
     } else if (value == 2) {
       document = await PDFDocument.fromURL(
-        "https://www.africau.edu/images/default/sample.pdf",
+        "https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf",
 
-        /* cacheManager: CacheManager(
-          Config(
-            "customCacheKey",
-            stalePeriod: const Duration(days: 2),
-            maxNrOfCacheObjects: 10,
-          ),
-        ), */
+        
       );
     } else {
       document = await PDFDocument.fromAsset('assets/sample.pdf');
@@ -92,18 +84,14 @@ class _MyAppState extends State<MyApp> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => WithProgress(),
-                  ),
+                  MaterialPageRoute(builder: (context) => WithProgress()),
                 );
               },
             ),
           ],
         ),
       ),
-      appBar: AppBar(
-        title: const Text('PDFViewer'),
-      ),
+      appBar: AppBar(title: const Text('PDFViewer')),
       body: Center(
         child: _isLoading
             ? Center(child: CircularProgressIndicator())
@@ -111,9 +99,7 @@ class _MyAppState extends State<MyApp> {
                 document: document,
                 lazyLoad: false,
                 zoomSteps: 1,
-                numberPickerConfirmWidget: const Text(
-                  "Confirm",
-                ),
+                numberPickerConfirmWidget: const Text("Confirm"),
                 //uncomment below line to preload all pages
                 // lazyLoad: false,
                 // uncomment below line to scroll vertically
